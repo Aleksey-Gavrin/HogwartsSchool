@@ -46,4 +46,11 @@ public class StudentService {
         }
         return studentRepository.findAllByAge(age);
     }
+
+    public Collection<Student> findByAgeBetween(int min, int max) {
+        if (min <= 0 || max <= 0 || min >= max) {
+            throw new ItemNotFoundException("invalid age input");
+        }
+        return studentRepository.findAllByAgeBetween(min, max);
+    }
 }
