@@ -48,6 +48,9 @@ public class FacultyService {
     }
 
     public Collection<Faculty> findAllByNameOrColor(String name, String color) {
+        if ((name != null && name.isBlank()) || (color != null && color.isBlank())) {
+            throw new ItemNotFoundException("invalid name or color input");
+        }
         return facultyRepository.findAllByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
 }

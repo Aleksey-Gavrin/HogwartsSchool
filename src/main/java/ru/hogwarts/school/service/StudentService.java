@@ -35,9 +35,9 @@ public class StudentService {
     }
 
     public Student removeStudent(long id) {
-        Student existingStudent = findStudent(id);
+        Student studentToDelete = findStudent(id);
         studentRepository.deleteById(id);
-        return existingStudent;
+        return studentToDelete;
     }
 
     public Collection<Student> findByAge(int age) {
@@ -48,7 +48,7 @@ public class StudentService {
     }
 
     public Collection<Student> findByAgeBetween(int min, int max) {
-        if (min <= 0 || max <= 0 || min >= max) {
+        if (min < 0 || max <= 0 || min > max) {
             throw new ItemNotFoundException("invalid age input");
         }
         return studentRepository.findAllByAgeBetween(min, max);
