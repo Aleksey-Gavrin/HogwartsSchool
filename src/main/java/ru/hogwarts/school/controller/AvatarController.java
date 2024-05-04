@@ -7,12 +7,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.dto.AvatarDTO;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.service.AvatarService;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student/avatar")
@@ -66,6 +68,11 @@ public class AvatarController {
     public ResponseEntity<Void> deleteAvatarFromDB(@PathVariable long id) {
         avatarService.removeByStudentId(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getPage")
+    public List<AvatarDTO> getAvatarsPage(@RequestParam("pageNumber") int page, @RequestParam("pageSize") int size) {
+        return avatarService.getAvatarsPage(page - 1, size);
     }
 
 }

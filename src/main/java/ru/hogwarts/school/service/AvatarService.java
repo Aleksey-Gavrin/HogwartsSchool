@@ -1,8 +1,11 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.dto.AvatarDTO;
 import ru.hogwarts.school.exceptions.ItemNotFoundException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
@@ -14,6 +17,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -89,5 +94,13 @@ public class AvatarService {
             ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
         }
+    }
+
+    public List<AvatarDTO> getAvatarsPage(int page, int size) {
+        Pageable p = PageRequest.of(page, size);
+        return avatarRepository.findAll(p).getContent().stream()
+                .map(avatar -> new AvatarDTO(avatar.getStudent().getName(),
+                        "http://localhost:8080/student/avatar/" + avatar.getStudent().getId()))
+                .collect(Collectors.toList());
     }
 }
