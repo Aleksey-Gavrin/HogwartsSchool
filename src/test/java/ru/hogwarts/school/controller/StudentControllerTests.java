@@ -76,12 +76,12 @@ public class StudentControllerTests {
 
     @Test
     void getStudentsFiltered() throws JsonProcessingException {
-        Student student1 = createStudent("Harry", 15);
-        Student student2 = createStudent("Ron", 20);
-        Student student3 = createStudent("Hermione", 25);
+        Student student1 = createStudent("Harry", 50);
+        Student student2 = createStudent("Ron", 60);
+        Student student3 = createStudent("Hermione", 70);
 
         ResponseEntity<String> jsonResponseFilteredByAge = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/filteredByAge?age=15", String.class);
+                + port + "/student/filteredByAge?age=50", String.class);
         assertThat(jsonResponseFilteredByAge.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(jsonResponseFilteredByAge.getBody()).isNotNull();
 
@@ -95,7 +95,7 @@ public class StudentControllerTests {
         assertThat(jsonResponseFilteredByAge.getStatusCode().is4xxClientError()).isTrue();
 
         ResponseEntity<String> jsonResponseFilteredByAgeBetween = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/filteredByAgeBetween?ageMin=19&ageMax=26", String.class);
+                + port + "/student/filteredByAgeBetween?ageMin=59&ageMax=71", String.class);
         assertThat(jsonResponseFilteredByAgeBetween.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(jsonResponseFilteredByAgeBetween.getBody()).isNotNull();
 
