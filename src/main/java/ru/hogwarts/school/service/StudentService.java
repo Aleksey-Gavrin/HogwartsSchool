@@ -86,4 +86,26 @@ public class StudentService {
         logger.info("Invoked method: getLastAddedStudents()");
         return studentRepository.getLastAddedStudents(quantity);
     }
+
+    public List<String> getAllNamesStartingWith(String str) {
+        logger.info("Invoked method: getAllNamesStartingWith()");
+        String validatedString = String.valueOf(str.toUpperCase().charAt(0));
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith(validatedString))
+                .sorted()
+                .toList();
+    }
+
+    public double getStudentsAvgAgeByStream() {
+        logger.info("Invoked method: getStudentsAvgAgeByStream()");
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .map(Student::getAge)
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0);
+    }
 }

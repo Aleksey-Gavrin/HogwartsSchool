@@ -68,4 +68,14 @@ public class StudentController {
     public List<Student> getLastAddedStudents(@RequestParam("quantity") int quantity) {
         return studentService.getLastAddedStudents(quantity);
     }
+
+    @GetMapping("/getAllNamesStartingWith")
+    public List<String> getAllNamesStartingWith(@RequestParam("firstLetter") String str) {
+        return studentService.getAllNamesStartingWith(str);
+    }
+
+    @GetMapping("/getStudentsAvgAgeByStream")
+    public double getStudentsAvgAgeByStream() {
+        return studentService.getStudentsAvgAgeByStream();
+    }
 }
