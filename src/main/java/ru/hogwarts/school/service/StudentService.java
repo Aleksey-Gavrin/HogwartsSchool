@@ -86,4 +86,62 @@ public class StudentService {
         logger.info("Invoked method: getLastAddedStudents()");
         return studentRepository.getLastAddedStudents(quantity);
     }
+
+    public void printParallel() {
+        logger.info("Invoked method: printParallel()");
+        List<Student> students = studentRepository.findAll();
+
+        System.out.println("--".repeat(15));
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        Thread t1 = new Thread(() ->
+        {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        }
+        );
+
+        Thread t2 = new Thread(() ->
+        {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        }
+        );
+
+        t1.start();
+        t2.start();
+    }
+
+    public void printParallelSync() {
+        logger.info("Invoked method: printParallelSync()");
+        List<Student> students = studentRepository.findAll();
+
+        System.out.println("--".repeat(15));
+
+        printSync(students.get(0).getName());
+        printSync(students.get(1).getName());
+
+        Thread t1 = new Thread(() ->
+        {
+            printSync(students.get(2).getName());
+            printSync(students.get(3).getName());
+        }
+        );
+
+        Thread t2 = new Thread(() ->
+        {
+            printSync(students.get(4).getName());
+            printSync(students.get(5).getName());
+        }
+        );
+
+        t1.start();
+        t2.start();
+    }
+
+    private synchronized void printSync(String str) {
+        System.out.println(str);
+    }
 }

@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
@@ -67,5 +67,15 @@ public class StudentController {
     @GetMapping("/getLastAdded")
     public List<Student> getLastAddedStudents(@RequestParam("quantity") int quantity) {
         return studentService.getLastAddedStudents(quantity);
+    }
+
+    @GetMapping("print-parallel")
+    public void printParallel() {
+        studentService.printParallel();
+    }
+
+    @GetMapping("print-synchronized")
+    public void printParallelSync() {
+        studentService.printParallelSync();
     }
 }
