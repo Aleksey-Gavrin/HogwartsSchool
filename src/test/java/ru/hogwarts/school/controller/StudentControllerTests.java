@@ -48,30 +48,30 @@ public class StudentControllerTests {
         Student testStudent = new Student(0, "Hermione", 16);
         testStudent.setFaculty(testFaculty);
 
-        Student response = this.restTemplate.postForObject("http://localhost:" + port + "/student",
+        Student response = this.restTemplate.postForObject("http://localhost:" + port + "/students",
                 testStudent, Student.class);
         assertThat(response).isNotNull();
         assertThat(response.getName()).isEqualTo("Hermione");
 
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/student/"
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/students/"
                 + response.getId(), String.class)).isNotNull().contains("Hermione");
 
-        Faculty responseFaculty = this.restTemplate.getForObject("http://localhost:" + port + "/student/" +
+        Faculty responseFaculty = this.restTemplate.getForObject("http://localhost:" + port + "/students/" +
                 response.getId() + "/faculty", Faculty.class);
         assertThat(responseFaculty).isNotNull();
         assertThat(responseFaculty.getName()).isEqualTo("Gryffindor");
 
         testStudent.setAge(20);
         RequestEntity<Student> requestEntity = new RequestEntity<>(testStudent, HttpMethod.PUT, null);
-        ResponseEntity<Student> responseToUpdate = this.restTemplate.exchange("http://localhost:" + port + "/student/"
+        ResponseEntity<Student> responseToUpdate = this.restTemplate.exchange("http://localhost:" + port + "/students/"
                 + response.getId(), HttpMethod.PUT, requestEntity, Student.class );
         assertThat(responseToUpdate.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(responseToUpdate.getBody()).isNotNull();
         assertThat(responseToUpdate.getBody().getAge()).isEqualTo(20);
 
-        this.restTemplate.delete("http://localhost:" + port + "/student/" +
+        this.restTemplate.delete("http://localhost:" + port + "/students/" +
                 response.getId());
-        ResponseEntity<Student> responseAfterDelete = this.restTemplate.getForEntity("http://localhost:" + port + "/student/" +
+        ResponseEntity<Student> responseAfterDelete = this.restTemplate.getForEntity("http://localhost:" + port + "/students/" +
                 response.getId(), Student.class);
         assertThat(responseAfterDelete.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
@@ -83,7 +83,7 @@ public class StudentControllerTests {
         Student student3 = createStudent("Hermione", 70);
 
         ResponseEntity<String> jsonResponseFilteredByAge = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/filteredByAge?age=50", String.class);
+                + port + "/students/filteredByAge?age=50", String.class);
         assertThat(jsonResponseFilteredByAge.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(jsonResponseFilteredByAge.getBody()).isNotNull();
 
@@ -93,11 +93,11 @@ public class StudentControllerTests {
         assertThat(students.get(0).getName()).isEqualTo("Harry");
 
         jsonResponseFilteredByAge = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/filteredByAge?age=0", String.class);
+                + port + "/students/filteredByAge?age=0", String.class);
         assertThat(jsonResponseFilteredByAge.getStatusCode().is4xxClientError()).isTrue();
 
         ResponseEntity<String> jsonResponseFilteredByAgeBetween = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/filteredByAgeBetween?ageMin=59&ageMax=71", String.class);
+                + port + "/students/filteredByAgeBetween?ageMin=59&ageMax=71", String.class);
         assertThat(jsonResponseFilteredByAgeBetween.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(jsonResponseFilteredByAgeBetween.getBody()).isNotNull();
 
@@ -108,7 +108,7 @@ public class StudentControllerTests {
         assertThat(students.get(1).getName().contains("on")).isTrue();
 
         jsonResponseFilteredByAgeBetween = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/filteredByAgeBetween?ageMin=10&ageMax=0", String.class);
+                + port + "/students/filteredByAgeBetween?ageMin=10&ageMax=0", String.class);
         assertThat(jsonResponseFilteredByAgeBetween.getStatusCode().is4xxClientError()).isTrue();
     }
 
@@ -149,7 +149,7 @@ public class StudentControllerTests {
     private Student createStudent(String name, int age) {
         Student testStudent = new Student(0, name, age);
         testStudent.setFaculty(testFaculty);
-        return this.restTemplate.postForObject("http://localhost:" + port + "/student",
+        return this.restTemplate.postForObject("http://localhost:" + port + "/students",
                 testStudent, Student.class);
     }
 
