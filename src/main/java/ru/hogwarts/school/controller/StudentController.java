@@ -30,7 +30,7 @@ public class StudentController {
 
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
-       return studentService.addStudent(student);
+        return studentService.addStudent(student);
     }
 
     @PutMapping("/{id}")
@@ -68,8 +68,8 @@ public class StudentController {
     public List<Student> getLastAddedStudents(@RequestParam("quantity") int quantity) {
         return studentService.getLastAddedStudents(quantity);
     }
-  
-   @GetMapping("print-parallel")
+
+    @GetMapping("print-parallel")
     public void printParallel() {
         studentService.printParallel();
     }
@@ -77,8 +77,9 @@ public class StudentController {
     @GetMapping("print-synchronized")
     public void printParallelSync() {
         studentService.printParallelSync();
-      
-      @GetMapping("/getAllNamesStartingWith")
+    }
+
+    @GetMapping("/getAllNamesStartingWith")
     public List<String> getAllNamesStartingWith(@RequestParam("firstLetter") String str) {
         return studentService.getAllNamesStartingWith(str);
     }

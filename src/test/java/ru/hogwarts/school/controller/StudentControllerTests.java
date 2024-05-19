@@ -119,7 +119,7 @@ public class StudentControllerTests {
         Student student3 = createStudent("Travis", 30);
 
         ResponseEntity<String> jsonResponseGetAllNames = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/getAllNamesStartingWith?firstLetter=t", String.class);
+                + port + "/students/getAllNamesStartingWith?firstLetter=t", String.class);
         assertThat(jsonResponseGetAllNames.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(jsonResponseGetAllNames.getBody()).isNotNull();
 
@@ -137,7 +137,7 @@ public class StudentControllerTests {
         Student student3 = createStudent("Travis", 9);
 
         ResponseEntity<String> jsonResponseGetAgeByStream = this.restTemplate.getForEntity("http://localhost:"
-                + port + "/student/getStudentsAvgAgeByStream", String.class);
+                + port + "/students/getStudentsAvgAgeByStream", String.class);
         assertThat(jsonResponseGetAgeByStream.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(jsonResponseGetAgeByStream.getBody()).isNotNull();
 

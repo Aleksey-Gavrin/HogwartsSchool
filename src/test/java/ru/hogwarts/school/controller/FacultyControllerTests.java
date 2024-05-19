@@ -143,7 +143,7 @@ public class FacultyControllerTests {
     }
 
     @Test
-    void getLongestFacultyName() throws JsonProcessingException {
+    void getLongestFacultyName() {
         Faculty faculty1 = createFaculty("Gryffindor", "Red");
         Faculty faculty2 = createFaculty("Sly", "Green");
         Faculty faculty3 = createFaculty("Raven", "Blue");
@@ -167,7 +167,7 @@ public class FacultyControllerTests {
     private Student createStudent(String name, int age, Faculty faculty) {
         Student testStudent = new Student(0, name, age);
         testStudent.setFaculty(faculty);
-        return this.restTemplate.postForObject("http://localhost:" + port + "/student",
+        return this.restTemplate.postForObject("http://localhost:" + port + "/students",
                 testStudent, Student.class);
     }
 
