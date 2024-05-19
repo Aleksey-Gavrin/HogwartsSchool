@@ -69,6 +69,17 @@ public class StudentController {
         return studentService.getLastAddedStudents(quantity);
     }
 
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("print-parallel")
     public void printParallel() {
         studentService.printParallel();
