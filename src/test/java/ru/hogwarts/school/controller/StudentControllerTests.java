@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.hogwarts.school.SchoolApplication;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = SchoolApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class StudentControllerTests {
     @LocalServerPort
     private int port;
@@ -108,6 +110,40 @@ public class StudentControllerTests {
         jsonResponseFilteredByAgeBetween = this.restTemplate.getForEntity("http://localhost:"
                 + port + "/students/filteredByAgeBetween?ageMin=10&ageMax=0", String.class);
         assertThat(jsonResponseFilteredByAgeBetween.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+    @Test
+    void getAllNamesStartingWith() throws JsonProcessingException {
+        Student student1 = createStudent("Tom", 20);
+        Student student2 = createStudent("Mark", 25);
+        Student student3 = createStudent("Travis", 30);
+
+        ResponseEntity<String> jsonResponseGetAllNames = this.restTemplate.getForEntity("http://localhost:"
+                + port + "/student/getAllNamesStartingWith?firstLetter=t", String.class);
+        assertThat(jsonResponseGetAllNames.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(jsonResponseGetAllNames.getBody()).isNotNull();
+
+        ArrayList<String> names = objectMapper.readValue(jsonResponseGetAllNames.getBody(), new TypeReference<>() {
+        });
+        assertThat(names.size()).isEqualTo(2);
+        assertThat(names.get(0)).isEqualTo("TOM");
+        assertThat(names.get(1)).isEqualTo("TRAVIS");
+    }
+
+    @Test
+    void getStudentsAvgAgeByStream() throws JsonProcessingException {
+        Student student1 = createStudent("Tom", 3);
+        Student student2 = createStudent("Mark", 6);
+        Student student3 = createStudent("Travis", 9);
+
+        ResponseEntity<String> jsonResponseGetAgeByStream = this.restTemplate.getForEntity("http://localhost:"
+                + port + "/student/getStudentsAvgAgeByStream", String.class);
+        assertThat(jsonResponseGetAgeByStream.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(jsonResponseGetAgeByStream.getBody()).isNotNull();
+
+        Double avgAge = objectMapper.readValue(jsonResponseGetAgeByStream.getBody(), new TypeReference<>() {
+        });
+        assertThat(avgAge).isEqualTo(6.00);
     }
 
     private Student createStudent(String name, int age) {

@@ -70,4 +70,13 @@ public class FacultyService {
         }
         return facultyRepository.findAllByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
+
+    public String getLongestFacultyName() {
+        logger.info("Invoked method: getLongestFacultyName()");
+        List<Faculty> faculties = facultyRepository.findAll();
+        return faculties.stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
 }

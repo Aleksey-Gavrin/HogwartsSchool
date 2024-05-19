@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.hogwarts.school.SchoolApplication;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = SchoolApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class FacultyControllerTests {
     @LocalServerPort
     private int port;
@@ -138,6 +140,22 @@ public class FacultyControllerTests {
         jsonResponseFilteredByNameOrColor = this.restTemplate.getForEntity("http://localhost:"
                 + port + "/faculty/filteredByNameOrColor?name=" + emptyString + "&color=" + emptyString, String.class);
         assertThat(jsonResponseFilteredByNameOrColor.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+    @Test
+    void getLongestFacultyName() throws JsonProcessingException {
+        Faculty faculty1 = createFaculty("Gryffindor", "Red");
+        Faculty faculty2 = createFaculty("Sly", "Green");
+        Faculty faculty3 = createFaculty("Raven", "Blue");
+
+        ResponseEntity<String> jsonResponseGetLongestName = this.restTemplate.getForEntity("http://localhost:"
+                + port + "/faculty/getLongestFacultyName", String.class);
+        assertThat(jsonResponseGetLongestName.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(jsonResponseGetLongestName.getBody()).isNotNull();
+
+        String longestName = jsonResponseGetLongestName.getBody();
+
+        assertThat(longestName).isEqualTo("Gryffindor");
     }
 
     private Faculty createFaculty(String name, String color) {
