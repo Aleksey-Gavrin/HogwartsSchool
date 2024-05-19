@@ -87,6 +87,64 @@ public class StudentService {
         return studentRepository.getLastAddedStudents(quantity);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public List<String> getAllNamesStartingWith(String str) {
         logger.info("Invoked method: getAllNamesStartingWith()");
         String validatedString = String.valueOf(str.toUpperCase().charAt(0));
